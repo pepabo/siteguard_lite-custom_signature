@@ -1,0 +1,9 @@
+ON	NONE		exclude-for-param-foo	URL	PCRE_CASELESS	^http://example\.com		fooパラメータは全シグネチャを除外する
+ON	NONE		exclude-for-param-foo	PARAM_NAME	PCRE_CASELESS,AND,EXCLUDE_OFFICIAL(^.+$)	^foo$		fooパラメータは全シグネチャを除外する
+ON	NONE		exclude-oscmd-try	URL	PCRE_CASELESS	^http://example\.com		oscmd-try系を除外する
+ON	NONE		exclude-oscmd-try	PARAM_NAME	PCRE_CASELESS,AND,EXCLUDE_OFFICIAL(^(oscmd-try-(10|11|12|13|14|15))$)	foo|bar|baz		oscmd-try系を除外する
+ON	NONE		exclude-traversal-3	PARAM_VALUE	PCRE_CASELESS,EXCLUDE_OFFICIAL(^traversal-3$)	//img\.example\.com/etc/		画像URLの一部として/etc/が含まれるときはtraversal-3を除外する
+ON	NONE		exclude-for-url-foo	URL	PCRE_CASELESS	^http://example\.com/foo		URL /fooのための除外
+ON	NONE		exclude-for-url-foo	PARAM_NAME	PCRE_CASELESS,AND,EXCLUDE_OFFICIAL(^(xss-onX-(\\d+|[a-z]+)|xss-style-filter|xss-tag-filter)$)	^(aaa)$		URL /fooのための除外
+ON	NONE		exclude-for-url-bar	URL	PCRE_CASELESS	^http://example\.com/bar		URL /barのための除外
+ON	NONE		exclude-for-url-bar	PARAM_NAME	PCRE_CASELESS,AND,EXCLUDE_OFFICIAL(^(xss-onX-(\\d+|[a-z]+)|xss-style-filter|xss-tag-filter)$)	^(bbb|ccc)$		URL /barのための除外

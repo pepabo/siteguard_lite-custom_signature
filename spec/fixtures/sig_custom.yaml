@@ -1,0 +1,67 @@
+common_exclusion: &common_exclusion
+  exclusion_action: EXCLUDE_OFFICIAL
+  signature: "^(xss-onX-(\\d+|[a-z]+)|xss-style-filter|xss-tag-filter)$"
+
+rules:
+  -
+    name: exclude-for-param-foo
+    comment: fooパラメータは全シグネチャを除外する
+    conditions:
+      - key: URL
+        value: "^http://example\\.com"
+        comparison_methods:
+          - PCRE_CASELESS
+      - key: PARAM_NAME
+        value: "^foo$"
+        comparison_methods:
+          - PCRE_CASELESS
+    exclusion_action: EXCLUDE_OFFICIAL
+    signature: "^.+$"
+  - name: exclude-oscmd-try
+    comment: oscmd-try系を除外する
+    conditions:
+      - key: URL
+        value: "^http://example\\.com"
+        comparison_methods:
+          - PCRE_CASELESS
+      - key: PARAM_NAME
+        value: "foo|bar|baz"
+        comparison_methods:
+          - PCRE_CASELESS
+    exclusion_action: EXCLUDE_OFFICIAL
+    signature: "^(oscmd-try-(10|11|12|13|14|15))$"
+  - name: exclude-traversal-3
+    comment: URLではtraversal-3を除外する
+    conditions:
+      - key: PARAM_VALUE
+        value: "//img\\.example\\.com/etc/"
+        comparison_methods:
+          - PCRE_CASELESS
+    exclusion_action: EXCLUDE_OFFICIAL
+    signature: "^traversal-3$"
+  -
+    <<: *common_exclusion
+    name: exclude-for-url-foo
+    comment: URL /fooのための除外
+    conditions:
+      - key: URL
+        value: "^http://example\\.com/foo"
+        comparison_methods:
+          - PCRE_CASELESS
+      - key: PARAM_NAME
+        value: "^(aaa)$"
+        comparison_methods:
+          - PCRE_CASELESS
+  -
+    <<: *common_exclusion
+    name: exclude-for-url-bar
+    comment: URL /barのための除外
+    conditions:
+      - key: URL
+        value: "^http://example\\.com/bar"
+        comparison_methods:
+          - PCRE_CASELESS
+      - key: PARAM_NAME
+        value: "^(bbb|ccc)$"
+        comparison_methods:
+          - PCRE_CASELESS
