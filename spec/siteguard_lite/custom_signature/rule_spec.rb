@@ -34,6 +34,11 @@ RSpec.describe SiteguardLite::CustomSignature::Rule do
         before { args[:signature] = 'a' * 1000 }
         it { is_expected.to eq false }
       end
+
+      context 'when blank' do
+        before { args[:signature] = nil }
+        it { is_expected.to eq true }
+      end
     end
   end
 end
