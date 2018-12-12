@@ -4,6 +4,7 @@ RSpec.describe SiteguardLite::CustomSignature::Rule do
     let(:args) {
       {
         name: 'signature-name',
+        action: 'NONE',
         comment: 'comment',
         exclusion_action: 'EXCLUDE_OFFICIAL',
         signature: '^.+$',
@@ -20,6 +21,18 @@ RSpec.describe SiteguardLite::CustomSignature::Rule do
 
       context 'when length is 30 characters' do
         before { args[:name] = 'a' * 30 }
+        it { is_expected.to eq false }
+      end
+    end
+
+    describe 'action' do
+      context 'when valid action value' do
+        before { args[:action] = 'BLOCK' }
+        it { is_expected.to eq true }
+      end
+
+      context 'when invalid action value' do
+        before { args[:action] = 'ERROR' }
         it { is_expected.to eq false }
       end
     end
