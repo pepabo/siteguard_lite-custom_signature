@@ -1,3 +1,5 @@
+ON	WHITE		white-bar-extension	PATH	PCRE_CASELESS	^.*\.bar$		.barは全て通す
+ON	BLOCK		block-foo-extension	PATH	PCRE_CASELESS	^.*\.foo$		.fooは全てブロックする
 ON	NONE		exclude-for-param-foo	URL	PCRE_CASELESS	^http://example\.com		fooパラメータは全シグネチャを除外する
 ON	NONE		exclude-for-param-foo	PARAM_NAME	PCRE_CASELESS,AND,EXCLUDE_OFFICIAL(^.+$)	^foo$		fooパラメータは全シグネチャを除外する
 ON	NONE		exclude-oscmd-try	URL	PCRE_CASELESS	^http://example\.com		oscmd-try系を除外する

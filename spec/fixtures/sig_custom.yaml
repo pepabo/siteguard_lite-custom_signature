@@ -3,6 +3,22 @@ common_exclusion: &common_exclusion
   signature: "^(xss-onX-(\\d+|[a-z]+)|xss-style-filter|xss-tag-filter)$"
 
 rules:
+  - name: white-bar-extension
+    action: WHITE
+    comment: .barは全て通す
+    conditions:
+      - key: PATH
+        value: "^.*\\.bar"
+        comparison_methods:
+          - PCRE_CASELESS
+  - name: block-foo-extension
+    action: BLOCK
+    comment: .fooは全てブロックする
+    conditions:
+      - key: PATH
+        value: "^.*\\.foo"
+        comparison_methods:
+          - PCRE_CASELESS
   -
     name: exclude-for-param-foo
     comment: fooパラメータは全シグネチャを除外する

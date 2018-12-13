@@ -1,5 +1,26 @@
 RSpec.describe SiteguardLite::CustomSignature::TextLoader do
   describe '.load_text' do
+    context 'when a rule have no exclude_action' do
+      let(:text) { <<~'EOD'}
+        ON	BLOCK		block-foo-action	PATH	PCRE_CASELESS	^.*\.foo$		.fooはブロックする
+      EOD
+
+      it 'load correctly' do
+        rules = SiteguardLite::CustomSignature::TextLoader.load(text)
+        expect(rules).to be_kind_of Array
+        expect(rules.length).to eq 1
+        expect(rules[0].action).to eq 'BLOCK'
+        expect(rules[0].name).to eq 'block-foo-action'
+        expect(rules[0].comment).to eq '.fooはブロックする'
+        expect(rules[0].enable).to eq true
+        expect(rules[0].exclusion_action).to be_nil
+        expect(rules[0].signature).to be_nil
+        expect(rules[0].conditions.length).to eq 1
+        expect(rules[0].conditions[0].key).to eq 'PATH'
+        expect(rules[0].conditions[0].value).to eq '^.*\.foo$'
+        expect(rules[0].conditions[0].comparison_methods).to eq ['PCRE_CASELESS']
+      end
+    end
     context 'when a rule have one conditions' do
       let(:text) { <<~'EOD'}
         ON	NONE		exclude-traversal-3	PARAM_VALUE	PCRE_CASELESS,EXCLUDE_OFFICIAL(^traversal-3$)	//img\\.example\\.com/etc/		画像URLの一部として/etc/が含まれるときはtraversal-3を除外する

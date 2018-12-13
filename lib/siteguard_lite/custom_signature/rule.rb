@@ -3,17 +3,19 @@ module SiteguardLite
     class Rule
       include ActiveModel::Validations
 
-      attr_reader :name, :comment, :enable, :conditions
+      attr_reader :name, :action, :comment, :enable, :conditions
       attr_accessor :exclusion_action, :signature
 
       validates :name, bytesize: { maximum: 29 }
       validates :signature, bytesize: { maximum: 999 }
+      validates :action, inclusion: %w(BLOCK NONE WHITE) # TODO support FILTER action
 
       def initialize(args)
         @name = args[:name]
         @comment = args[:comment]
         @exclusion_action = args[:exclusion_action]
         @signature = args[:signature]
+        @action = args[:action] || 'NONE'
 
         @enable = true
 
@@ -42,6 +44,7 @@ module SiteguardLite
       def to_hash
         {
           name: @name,
+          action: @action,
           comment: @comment,
           exclusion_action: @exclusion_action,
           signature: @signature,

@@ -7,6 +7,7 @@ module SiteguardLite
         y['rules'].each do |r|
           rule = SiteguardLite::CustomSignature::Rule.new(
             name: r['name'],
+            action: r['action'],
             comment: r['comment'],
             exclusion_action: r['exclusion_action'],
             signature: r['signature']

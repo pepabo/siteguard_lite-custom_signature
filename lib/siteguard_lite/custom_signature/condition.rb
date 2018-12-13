@@ -20,7 +20,7 @@ module SiteguardLite
 
         [
           rule.enable_str,
-          'NONE',
+          rule.action,
           '',
           rule.name,
           @key,
@@ -42,14 +42,13 @@ module SiteguardLite
       private
 
       def comparison_str(rule, last)
-        if last
-          [
-            @comparison_methods,
-            "#{rule.exclusion_action}(#{rule.signature})"
-          ].flatten.join(',')
-        else
-          @comparison_methods.join(',')
+        str = @comparison_methods.join(',')
+
+        if last && rule.exclusion_action && rule.signature
+          str << ",#{rule.exclusion_action}(#{rule.signature})"
         end
+
+        str
       end
     end
   end
