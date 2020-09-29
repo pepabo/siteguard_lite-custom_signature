@@ -3,14 +3,16 @@ common_exclusion: &common_exclusion
   signature: "^(xss-onX-(\\d+|[a-z]+)|xss-style-filter|xss-tag-filter)$"
 
 rules:
-  - name: white-bar-extension
-    action: WHITE
-    comment: .barは全て通す
+  - name: filter-60sec
+    action: FILTER
+    exclusion_action: EXCLUDE_OFFICIAL
     conditions:
-      - key: PATH
-        value: "^.*\\.bar"
+      - key: URL
+        value: .*user\\.test\\.jp/.*
         comparison_methods:
           - PCRE_CASELESS
+          - AND
+          - COUNTER(60:30)
   - name: block-foo-extension
     action: BLOCK
     comment: .fooは全てブロックする
