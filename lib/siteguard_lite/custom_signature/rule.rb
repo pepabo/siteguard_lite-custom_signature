@@ -8,7 +8,7 @@ module SiteguardLite
 
       validates :name, bytesize: { maximum: 29 }
       validates :signature, bytesize: { maximum: 999 }
-      validates :action, inclusion: %w(BLOCK NONE WHITE) # TODO support FILTER action
+      validates :action, inclusion: %w(BLOCK NONE WHITE FILTER)
 
       def initialize(args)
         @name = args[:name]
