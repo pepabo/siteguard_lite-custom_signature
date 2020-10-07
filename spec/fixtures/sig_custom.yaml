@@ -6,6 +6,7 @@ rules:
   - name: filter-60sec
     action: FILTER
     exclusion_action: EXCLUDE_OFFICIAL
+    comment: 接続拒否時間60秒
     conditions:
       - key: URL
         value: ".*user\\.test\\.jp/.*"
@@ -13,6 +14,14 @@ rules:
           - PCRE_CASELESS
           - AND
           - COUNTER(60:30)
+  - name: white-bar-extension
+    action: WHITE
+    comment: .barは全て通す
+    conditions:
+      - key: PATH
+        value: "^.*\\.bar"
+        comparison_methods:
+          - PCRE_CASELESS
   - name: block-foo-extension
     action: BLOCK
     comment: .fooは全てブロックする
