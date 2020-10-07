@@ -8,7 +8,7 @@ rules:
     exclusion_action: EXCLUDE_OFFICIAL
     conditions:
       - key: URL
-        value: .*user\\.test\\.jp/.*
+        value: ".*user\\.test\\.jp/.*"
         comparison_methods:
           - PCRE_CASELESS
           - AND
