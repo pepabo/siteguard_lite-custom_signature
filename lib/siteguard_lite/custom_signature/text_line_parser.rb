@@ -8,6 +8,7 @@ module SiteguardLite
         {
           enable: enable(fields[0]),
           action: fields[1],
+          filter_lifetime: fields[2],
           name: fields[3],
           comment: fields[8],
           exclusion_action: exclusion_action(fields[5]),

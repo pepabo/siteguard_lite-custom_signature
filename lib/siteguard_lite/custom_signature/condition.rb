@@ -20,7 +20,8 @@ module SiteguardLite
 
         [
           rule.enable_str,
-          rule.action,
+          # actionがFILTERの場合、`FILTER:1800` のように整形する
+          to_action_filter_lifetime(rule.action, rule.filter_lifetime),
           '',
           rule.name,
           @key,
@@ -49,6 +50,10 @@ module SiteguardLite
         end
 
         str
+      end
+
+      def to_action_filter_lifetime(action, filter_lifetime)
+        action.include?('FILTER') ? action + ':' + filter_lifetime.to_s : action
       end
     end
   end

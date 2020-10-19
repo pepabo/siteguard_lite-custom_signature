@@ -17,6 +17,8 @@ module SiteguardLite
             rule.add_condition(*parsed[:condition].fetch_values(:key, :value, :comparison_methods))
             rule.exclusion_action = parsed[:exclusion_action]
             rule.signature = parsed[:signature]
+            rule.action = rule.to_action_filter(parsed[:action])
+            rule.filter_lifetime = rule.to_filter_lifetime(parsed[:action])
           else
             # This line is a new rule
             rules << rule if rule
@@ -29,6 +31,8 @@ module SiteguardLite
               signature: parsed[:signature],
             )
             rule.add_condition(*parsed[:condition].fetch_values(:key, :value, :comparison_methods))
+            rule.action = rule.to_action_filter(parsed[:action])
+            rule.filter_lifetime = rule.to_filter_lifetime(parsed[:action])
           end
         end
 

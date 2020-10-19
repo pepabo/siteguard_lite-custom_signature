@@ -4,11 +4,11 @@ module SiteguardLite
       include ActiveModel::Validations
 
       attr_reader :name, :action, :comment, :enable, :conditions
-      attr_accessor :exclusion_action, :signature
+      attr_accessor :exclusion_action, :signature, :action, :filter_lifetime
 
       validates :name, bytesize: { maximum: 29 }
       validates :signature, bytesize: { maximum: 999 }
-      validates :action, format: { with: /BLOCK|NONE|WHITE|FILTER/ }
+      validates :action, inclusion: %w(BLOCK NONE WHITE FILTER)
 
       def initialize(args)
         @name = args[:name]
@@ -16,6 +16,7 @@ module SiteguardLite
         @exclusion_action = args[:exclusion_action]
         @signature = args[:signature]
         @action = args[:action] || 'NONE'
+        @filter_lifetime = args[:filter_lifetime] || '300' # default 300sec
 
         @enable = true
 
@@ -45,11 +46,20 @@ module SiteguardLite
         {
           name: @name,
           action: @action,
+          filter_lifetime: @filter_lifetime,
           comment: @comment,
           exclusion_action: @exclusion_action,
           signature: @signature,
           conditions: @conditions.map { |c| c.to_hash },
         }
+      end
+
+      def to_action_filter(action)
+        action.include?('FILTER') ? 'FILTER' : action
+      end
+
+      def to_filter_lifetime(filter_lifetime)
+        filter_lifetime.include?('FILTER') ? filter_lifetime.delete('FILTER:') : nil
       end
     end
   end
