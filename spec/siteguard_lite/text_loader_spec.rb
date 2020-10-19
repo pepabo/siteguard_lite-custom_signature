@@ -66,5 +66,27 @@ RSpec.describe SiteguardLite::CustomSignature::TextLoader do
         expect(rules[0].conditions[1].comparison_methods).to eq ['PCRE_CASELESS', 'AND']
       end
     end
+    context 'when a rule have qfiliter_lifetime' do
+      let(:text) { <<~'EOD'}
+        ON	FILTER:1800		filter-60sec	URL	PCRE_CASELESS,AND,COUNTER(60:30)	.*user\.test\.jp/.*		接続拒否時間60秒
+      EOD
+
+      it 'load correctly' do
+        rules = SiteguardLite::CustomSignature::TextLoader.load(text)
+        expect(rules).to be_kind_of Array
+        expect(rules.length).to eq 1
+        expect(rules[0].action).to eq 'FILTER'
+        expect(rules[0].filter_lifetime).to eq '1800'
+        expect(rules[0].name).to eq 'filter-60sec'
+        expect(rules[0].comment).to eq '接続拒否時間60秒'
+        expect(rules[0].enable).to eq true
+        expect(rules[0].exclusion_action).to be_nil
+        expect(rules[0].signature).to be_nil
+        expect(rules[0].conditions.length).to eq 1
+        expect(rules[0].conditions[0].key).to eq 'URL'
+        expect(rules[0].conditions[0].value).to eq '.*user\.test\.jp/.*'
+        expect(rules[0].conditions[0].comparison_methods).to eq ['PCRE_CASELESS', 'AND', 'COUNTER(60:30)']
+      end
+    end
   end
 end
