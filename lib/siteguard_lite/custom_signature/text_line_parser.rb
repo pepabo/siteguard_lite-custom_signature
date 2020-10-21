@@ -7,8 +7,8 @@ module SiteguardLite
         fields = line.split("\t")
         {
           enable: enable(fields[0]),
-          action: fields[1],
-          filter_lifetime: fields[2],
+          action: parse_action(fields[1]),
+          filter_lifetime: parse_filter_lifetime(fields[1]),
           name: fields[3],
           comment: fields[8],
           exclusion_action: exclusion_action(fields[5]),
@@ -60,6 +60,16 @@ module SiteguardLite
         end
 
         @parsed_comarison_str = result
+      end
+
+      # action FILTER:1800
+      def parse_action(parsed_action)
+        parsed_action.include?('FILTER') ? 'FILTER' : parsed_action
+      end
+
+      # 300 default
+      def parse_filter_lifetime(parsed_action)
+        parsed_action.include?('FILTER') ? parsed_action.delete('FILTER:') : nil
       end
     end
   end
