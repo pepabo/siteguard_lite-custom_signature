@@ -1,6 +1,8 @@
 module SiteguardLite
   module CustomSignature
     class TextLineParser
+      FILTER_ACTION_REGEX = /\AFILTER:(\d+)\z/
+
       # siteguardlite-320-0_nginx.pdf, p.52
       # [有効・無効]<タブ>[動作]<タブ><タブ>[シグネチャ名]<タブ>[検査対象] <タブ>[比較方法]<タブ> [検査文字列]<タブ><タブ>[コメント]
       def parse(line)
@@ -63,11 +65,16 @@ module SiteguardLite
       end
 
       def parse_action(parsed_action)
-        parsed_action.include?('FILTER') ? 'FILTER' : parsed_action
+        case parsed_action
+        when FILTER_ACTION_REGEX
+          'FILTER'
+        else
+          parsed_action
+        end
       end
 
       def parse_filter_lifetime(parsed_action)
-        parsed_action.include?('FILTER') ? parsed_action.delete('FILTER:') : nil
+        parsed_action =~ FILTER_ACTION_REGEX ? $1 : nil
       end
     end
   end
