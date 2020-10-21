@@ -3,8 +3,8 @@ module SiteguardLite
     class Rule
       include ActiveModel::Validations
 
-      attr_reader :name, :action, :comment, :enable, :conditions
-      attr_accessor :exclusion_action, :signature, :action, :filter_lifetime
+      attr_reader :name, :comment, :enable, :conditions, :filter_lifetime
+      attr_accessor :action, :exclusion_action, :signature
 
       validates :name, bytesize: { maximum: 29 }
       validates :signature, bytesize: { maximum: 999 }
@@ -16,7 +16,11 @@ module SiteguardLite
         @exclusion_action = args[:exclusion_action]
         @signature = args[:signature]
         @action = args[:action] || 'NONE'
-        @filter_lifetime = args[:filter_lifetime] || '300' # default 300sec
+        @filter_lifetime = args[:filter_lifetime] || nil
+
+        if @action == ('FILTER') && @filter_lifetime.nil?
+          @filter_lifetime = 300 # default 300sec
+        end
 
         @enable = true
 
@@ -52,14 +56,6 @@ module SiteguardLite
           signature: @signature,
           conditions: @conditions.map { |c| c.to_hash },
         }
-      end
-
-      def to_action_filter(action)
-        action.include?('FILTER') ? 'FILTER' : action
-      end
-
-      def to_filter_lifetime(filter_lifetime)
-        filter_lifetime.include?('FILTER') ? filter_lifetime.delete('FILTER:') : nil
       end
     end
   end
