@@ -16,10 +16,11 @@ module SiteguardLite
         @exclusion_action = args[:exclusion_action]
         @signature = args[:signature]
         @action = args[:action] || 'NONE'
-        @filter_lifetime = args[:filter_lifetime] || nil
 
-        if @action == ('FILTER') && @filter_lifetime.nil?
-          @filter_lifetime = 300 # default 300sec
+        if @action == 'FILTER'
+          @filter_lifetime = args[:filter_lifetime] || 300
+        else
+          @filter_lifetime = nil
         end
 
         @enable = true
