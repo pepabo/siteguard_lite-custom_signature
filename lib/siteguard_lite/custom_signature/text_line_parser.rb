@@ -62,12 +62,10 @@ module SiteguardLite
         @parsed_comarison_str = result
       end
 
-      # action FILTER:1800
       def parse_action(parsed_action)
         parsed_action.include?('FILTER') ? 'FILTER' : parsed_action
       end
 
-      # 300 default
       def parse_filter_lifetime(parsed_action)
         parsed_action.include?('FILTER') ? parsed_action.delete('FILTER:') : nil
       end

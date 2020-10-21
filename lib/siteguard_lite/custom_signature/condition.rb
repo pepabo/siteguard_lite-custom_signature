@@ -22,7 +22,6 @@ module SiteguardLite
 
         [
           rule.enable_str,
-          # actionがFILTERの場合、`FILTER:1800` のように整形する
           rule.action,
           '',
           rule.name,
