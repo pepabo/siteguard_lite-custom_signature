@@ -8,6 +8,7 @@ module SiteguardLite
 
       validates :name, bytesize: { maximum: 29 }
       validates :signature, bytesize: { maximum: 999 }
+      validates :filter_lifetime, format: { with: /\A\d+\z/ }, allow_nil: true
       validates :action, inclusion: %w(BLOCK NONE WHITE FILTER)
 
       def initialize(args)
@@ -18,7 +19,7 @@ module SiteguardLite
         @action = args[:action] || 'NONE'
 
         if @action == 'FILTER'
-          @filter_lifetime = args[:filter_lifetime] || 300
+          @filter_lifetime = args[:filter_lifetime] || '300'
         else
           @filter_lifetime = nil
         end

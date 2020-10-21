@@ -53,6 +53,17 @@ RSpec.describe SiteguardLite::CustomSignature::Rule do
         it { is_expected.to eq true }
       end
     end
+
+    describe 'filter_lifetime' do
+      context 'when minus' do
+        before do
+          args[:action] = 'FILTER'
+          args[:filter_lifetime] = '-1'
+        end
+
+        it { is_expected.to eq false }
+      end
+    end
   end
 
   describe 'filter_lifetime' do
@@ -68,12 +79,12 @@ RSpec.describe SiteguardLite::CustomSignature::Rule do
 
       context 'filter_lifetime is not set' do
         before { args[:filter_lifetime] = nil }
-        it { is_expected.to eq 300 }
+        it { is_expected.to eq '300' }
       end
 
       context 'filter_lifetime is set' do
-        before { args[:filter_lifetime] = 500 }
-        it { is_expected.to eq 500 }
+        before { args[:filter_lifetime] = '500' }
+        it { is_expected.to eq '500' }
       end
     end
   end
