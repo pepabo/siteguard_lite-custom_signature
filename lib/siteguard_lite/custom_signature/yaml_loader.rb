@@ -8,6 +8,7 @@ module SiteguardLite
           rule = SiteguardLite::CustomSignature::Rule.new(
             name: r['name'],
             action: r['action'],
+            filter_lifetime: r['filter_lifetime'],
             comment: r['comment'],
             exclusion_action: r['exclusion_action'],
             signature: r['signature']

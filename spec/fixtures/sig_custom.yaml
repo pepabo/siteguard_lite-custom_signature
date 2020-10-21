@@ -3,6 +3,18 @@ common_exclusion: &common_exclusion
   signature: "^(xss-onX-(\\d+|[a-z]+)|xss-style-filter|xss-tag-filter)$"
 
 rules:
+  - name: filter-60sec
+    action: FILTER
+    filter_lifetime: 1800
+    exclusion_action: EXCLUDE_OFFICIAL
+    comment: 接続拒否時間60秒
+    conditions:
+      - key: URL
+        value: .*user\.test\.jp/.*
+        comparison_methods:
+          - PCRE_CASELESS
+          - AND
+          - COUNTER(60:30)
   - name: white-bar-extension
     action: WHITE
     comment: .barは全て通す

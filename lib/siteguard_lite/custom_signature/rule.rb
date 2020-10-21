@@ -3,12 +3,13 @@ module SiteguardLite
     class Rule
       include ActiveModel::Validations
 
-      attr_reader :name, :action, :comment, :enable, :conditions
-      attr_accessor :exclusion_action, :signature
+      attr_reader :name, :comment, :enable, :conditions, :filter_lifetime
+      attr_accessor :action, :exclusion_action, :signature
 
       validates :name, bytesize: { maximum: 29 }
       validates :signature, bytesize: { maximum: 999 }
-      validates :action, inclusion: %w(BLOCK NONE WHITE) # TODO support FILTER action
+      validates :filter_lifetime, format: { with: /\A\d+\z/ }, allow_nil: true
+      validates :action, inclusion: %w(BLOCK NONE WHITE FILTER)
 
       def initialize(args)
         @name = args[:name]
@@ -16,6 +17,12 @@ module SiteguardLite
         @exclusion_action = args[:exclusion_action]
         @signature = args[:signature]
         @action = args[:action] || 'NONE'
+
+        if @action == 'FILTER'
+          @filter_lifetime = args[:filter_lifetime] || '300'
+        else
+          @filter_lifetime = nil
+        end
 
         @enable = true
 
@@ -28,6 +35,10 @@ module SiteguardLite
 
       def enable_str
         @enable ? 'ON' : 'OFF'
+      end
+
+      def action_str
+        @action == 'FILTER' ? "#{@action}:#{@filter_lifetime}" : @action
       end
 
       def to_text
@@ -45,6 +56,7 @@ module SiteguardLite
         {
           name: @name,
           action: @action,
+          filter_lifetime: @filter_lifetime,
           comment: @comment,
           exclusion_action: @exclusion_action,
           signature: @signature,

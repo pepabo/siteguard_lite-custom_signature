@@ -13,7 +13,7 @@ RSpec.describe SiteguardLite::CustomSignature do
     it 'load yaml format data' do
       rules = SiteguardLite::CustomSignature.load_yaml(yaml)
       expect(rules).to be_kind_of Array
-      expect(rules.length).to eq 7
+      expect(rules.length).to eq 8
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.describe SiteguardLite::CustomSignature do
     it 'load text format data' do
       rules = SiteguardLite::CustomSignature.load_text(text)
       expect(rules).to be_kind_of Array
-      expect(rules.length).to eq 7
+      expect(rules.length).to eq 8
     end
   end
 

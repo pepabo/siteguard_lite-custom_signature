@@ -17,10 +17,9 @@ module SiteguardLite
       # [有効・無効]<タブ>[動作]<タブ><タブ>[シグネチャ名]<タブ>[検査対象] <タブ>[比較方法]<タブ> [検査文字列]<タブ><タブ>[コメント]
       def to_text(rule, last: false)
         validate!
-
         [
           rule.enable_str,
-          rule.action,
+          rule.action_str,
           '',
           rule.name,
           @key,

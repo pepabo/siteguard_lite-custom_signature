@@ -23,6 +23,7 @@ module SiteguardLite
             rule = Rule.new(
               enable: parsed[:enable],
               action: parsed[:action],
+              filter_lifetime: parsed[:filter_lifetime],
               name: parsed[:name],
               comment: parsed[:comment],
               exclusion_action: parsed[:exclusion_action],

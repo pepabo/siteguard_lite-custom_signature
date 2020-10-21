@@ -1,16 +1,16 @@
 RSpec.describe SiteguardLite::CustomSignature::Rule do
-  describe '.valid?' do
-    let(:rule) { SiteguardLite::CustomSignature::Rule.new(args) }
-    let(:args) {
-      {
-        name: 'signature-name',
-        action: 'NONE',
-        comment: 'comment',
-        exclusion_action: 'EXCLUDE_OFFICIAL',
-        signature: '^.+$',
-      }
+  let(:rule) { SiteguardLite::CustomSignature::Rule.new(args) }
+  let(:args) {
+    {
+      name: 'signature-name',
+      action: 'NONE',
+      comment: 'comment',
+      exclusion_action: 'EXCLUDE_OFFICIAL',
+      signature: '^.+$',
     }
+  }
 
+  describe '.valid?' do
     subject { rule.valid? }
 
     describe 'name' do
@@ -52,6 +52,58 @@ RSpec.describe SiteguardLite::CustomSignature::Rule do
         before { args[:signature] = nil }
         it { is_expected.to eq true }
       end
+    end
+
+    describe 'filter_lifetime' do
+      context 'when minus' do
+        before do
+          args[:action] = 'FILTER'
+          args[:filter_lifetime] = '-1'
+        end
+
+        it { is_expected.to eq false }
+      end
+    end
+  end
+
+  describe 'filter_lifetime' do
+    subject { rule.filter_lifetime }
+
+    context 'action is not FILTER' do
+      before { args[:action] = 'BLOCK' }
+      it { is_expected.to be_nil }
+    end
+
+    context 'action is FILTER' do
+      before { args[:action] = 'FILTER' }
+
+      context 'filter_lifetime is not set' do
+        before { args[:filter_lifetime] = nil }
+        it { is_expected.to eq '300' }
+      end
+
+      context 'filter_lifetime is set' do
+        before { args[:filter_lifetime] = '500' }
+        it { is_expected.to eq '500' }
+      end
+    end
+  end
+
+  describe '#action_str' do
+    subject { rule.action_str }
+
+    context 'action is not FILTER' do
+      before { args[:action] = 'BLOCK' }
+      it { is_expected.to eq args[:action] }
+    end
+
+    context 'action is FILTER' do
+      before do
+        args[:action] = 'FILTER'
+        args[:filter_lifetime] = '500'
+      end
+
+      it { is_expected.to eq "#{args[:action]}:#{args[:filter_lifetime]}"}
     end
   end
 end
