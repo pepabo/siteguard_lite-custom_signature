@@ -88,4 +88,22 @@ RSpec.describe SiteguardLite::CustomSignature::Rule do
       end
     end
   end
+
+  describe '#action_str' do
+    subject { rule.action_str }
+
+    context 'action is not FILTER' do
+      before { args[:action] = 'BLOCK' }
+      it { is_expected.to eq args[:action] }
+    end
+
+    context 'action is FILTER' do
+      before do
+        args[:action] = 'FILTER'
+        args[:filter_lifetime] = '500'
+      end
+
+      it { is_expected.to eq "#{args[:action]}:#{args[:filter_lifetime]}"}
+    end
+  end
 end

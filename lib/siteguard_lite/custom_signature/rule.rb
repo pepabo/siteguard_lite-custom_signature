@@ -37,6 +37,10 @@ module SiteguardLite
         @enable ? 'ON' : 'OFF'
       end
 
+      def action_str
+        @action == 'FILTER' ? "#{@action}:#{@filter_lifetime}" : @action
+      end
+
       def to_text
         validate!
 
