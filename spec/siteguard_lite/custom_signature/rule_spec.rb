@@ -31,6 +31,11 @@ RSpec.describe SiteguardLite::CustomSignature::Rule do
         it { is_expected.to eq true }
       end
 
+      context 'when valid action value' do
+        before { args[:action] = 'MONITOR' }
+        it { is_expected.to eq true }
+      end
+
       context 'when invalid action value' do
         before { args[:action] = 'ERROR' }
         it { is_expected.to eq false }
@@ -74,6 +79,11 @@ RSpec.describe SiteguardLite::CustomSignature::Rule do
       it { is_expected.to be_nil }
     end
 
+    context 'action is not FILTER' do
+      before { args[:action] = 'MONITOR' }
+      it { is_expected.to be_nil }
+    end
+
     context 'action is FILTER' do
       before { args[:action] = 'FILTER' }
 
@@ -94,6 +104,11 @@ RSpec.describe SiteguardLite::CustomSignature::Rule do
 
     context 'action is not FILTER' do
       before { args[:action] = 'BLOCK' }
+      it { is_expected.to eq args[:action] }
+    end
+
+    context 'action is not FILTER' do
+      before { args[:action] = 'MONITOR' }
       it { is_expected.to eq args[:action] }
     end
 
