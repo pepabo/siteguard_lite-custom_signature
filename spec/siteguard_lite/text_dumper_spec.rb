@@ -52,24 +52,5 @@ RSpec.describe SiteguardLite::CustomSignature::TextDumper do
         end
       end
     end
-
-    context 'have no exclusion_action' do
-      let(:rule_hash) {
-        {
-          name: 'name',
-          action: 'MONITOR',
-          comment: 'comment',
-        }
-      }
-      let(:rule) { SiteguardLite::CustomSignature::Rule.new(rule_hash) }
-
-      subject { SiteguardLite::CustomSignature::TextDumper.dump([rule]) }
-
-      context 'when a rule is valid' do
-        it 'not raise error' do
-          expect { subject }.not_to raise_error
-        end
-      end
-    end
   end
 end
