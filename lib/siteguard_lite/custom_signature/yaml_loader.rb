@@ -2,7 +2,7 @@ module SiteguardLite
   module CustomSignature
     class YamlLoader
       def self.load(yaml)
-        y = ::YAML.load(yaml)
+        y = ::YAML.load(yaml, aliases: true)
         rules = []
         y['rules'].each do |r|
           rule = SiteguardLite::CustomSignature::Rule.new(
